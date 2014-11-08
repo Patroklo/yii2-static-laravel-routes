@@ -9,7 +9,6 @@ use cyneek\yii2\routes\components\Route;
 
 class Module extends \yii\base\Module
 {
-	public $controllerNamespace = 'vendor\cyneek\yii2\routes\controllers';
 
 	/**
 	 * @var bool
