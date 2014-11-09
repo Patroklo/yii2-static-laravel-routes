@@ -673,14 +673,24 @@ class Route
 
 			if (array_key_exists('domain', $this->options))
 			{
+			
+				$web_domain = preg_replace('/http(s?):\/\//', '', Yii::$app->urlManager->getHostInfo());
+				
+				$web_domain = explode('.', $web_domain);
+				
+				// check if there is a chance of having a subdomain
+				if (count($web_domain) > 2)
+				{
+					unset($web_domain[0]);
+				}
+				
+				$web_domain = implode('.', $web_domain);
+				
+				$this->options['domain'] = 'http://'.$this->options['domain'].'.'.$web_domain;
+				
 				if (substr($this->options['domain'], -1) != '/')
 				{
 					$this->options['domain'].= '/';
-				}
-
-				if (strpos($this->options['domain'], 'http') === FALSE)
-				{
-					$this->options['domain'] = 'http://'.$this->options['domain'];
 				}
 
 				$this->from = $this->options['domain'].$this->from;

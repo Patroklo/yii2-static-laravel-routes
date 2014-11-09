@@ -1,32 +1,28 @@
 # Yii2 Laravel-like routes
 
+Routing and filtering extension system for Yii2 framework that emulates the Laravel routing system.
 
-## ¿Qué es Laravel-like routes?
+## What's Laravel-like routes?
 
+This module changes the route system definition of Yii2 in order to, instead of having to define the routes in the config file of the application now will be possible to make a series of files that hold the routes that the user will define for his web. This module lets the calling to a series of methods that will define the system routes in a more intuitive way that the basic Yii2 system getting it's inspiration from the routing system defined by Laravel.
 
-Este módulo modifica el sistema de definición de rutas de Yii2 para que, en lugar de necesitar ser definidas desde el archivo de configuración de la aplicación se pueda crear una serie de ficheros que contengan las rutas que el usuario quiera definir para su página web en las que se realizarán llamadas a una clase que gestione y almacene éstas hasta el momento de ejecución de la aplicación. Esta clase permite la llamada a una serie de métodos que permiten su definición y diseño de forma más intuitiva que lo que permite el sistema básico de Yii2 inspirándose en el sistema de enrutamiento definido por Laravel.
+Developed by Joseba Juániz ([@Patroklo](http://twitter.com/Patroklo))
 
+[Spanish Readme version](https://github.com/Patroklo/yii2-static-laravel-routes/blob/master/README.md)
 
-Desarrollado por Joseba Juániz (@Patroklo)
+## Minimum requirements
 
-## Requisitos
+* Yii2
+* Php 5.4 or above
 
-Yii2
+## Future plans
 
-Php 5.4 or above
+* Pass manual parameters to the filters.
+* Automatic system to make RESTFul Routes.
 
-## Planes de futuro
+## License
 
-* Pasar parámetros manuales a los filtros.
-* Crear sistema automático de hacer rutas RESTFul.
-// TODO
-* Probar los grupos de rutas como último parámetro en una ruta básica
-* Comprobar que en when el http verb funciona
-
-
-## Licencia
-
-Esto es software libre. Está liberador bajo los términos de la siguiente licencia BSD
+This is free software. It is released under the terms of the following BSD License.
 
 Copyright (c) 2014, by Cyneek
 All rights reserved.
@@ -54,16 +50,15 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-## Instalación
+## Instalation
 
 Comming soon...
 
-## Definición
+## Definition
 
-### Enrutamiento básico
+### Basic routing
 
-Los métodos básicos se encargan de enrutar cada url basándose en los métodos de petición que hayamos usado para su definición como métodos en la clase de enrutamiento.
+The basic routing methods will make a new route comprehensible by the Yii2 system.
 
 ```
 Route::get('user',            'user/index');
@@ -72,93 +67,35 @@ Route::put('user/(:any),      'user/update/$1');
 Route::delete('user/(:any)',  'user/delete/$1');
 Route::head('user',           'user/index');
 Route::patch('user/(:any),    'user/update/$1');
-Route::match('user/(:any),    'user/load/$1');
 ```
 
-El desarrollador también puede utilizar dos métodos adicionales que le permitiran trabajar con varios métodos de petición http.
+The developer also can use two additional methods that will let him work with more than one http verbs at the same time.
 
-`any` permitirá que la ruta funcione bajo cualquier método HTTP (GET, POST, PUT, DELETE, HEAD, PATCH, MATCH).
+`any` will let the route work under any HTTP method (GET, POST, PUT, DELETE, HEAD, PATCH),
 
 ```
 Route::any('user',            'user/index');
 ```
 
-`match` permite al desarrollador definir manualmente una serie de métodos HTTP que serán los que Yii2 escuche para lanzar esta ruta.
+`match` let's the developer to define manually a group of HTTP verbs that will the only ones that respond to this route.
 
 ```
 Route::match(['GET', 'POST'], 'user', 'user/index');
 ```
 
-### Parametros de rutas
+### Named routes
 
-Se pueden definir rutas con nombres propios en lugar de utilizar expresiones regulares. Esto permitirá al desarrollador el usarlas también en la obtención de los valores que tienen estos parámetros.
-
-Se han definido adicionalmente las wildcards `(:any)` que corresponde a una expresión regular con cualquier tipo de carácter y `(:num)` que obliga a que el parámetro sólo pueda contener números.
-
-```
-Route::any('user/{id}',     'user/load');
-```
-
-Hay dos formas de definir parámetros. La definición global, que asignará la expresión regular o el wildcar a todos los parámetros con ese nombre en todas las rutas que se definan en la aplicación, y la definición local, que tan sólo afectará a la ruta en la que es definida y SOBREESCRIBIRÁ cualquier ruta global que coincida con ese nombre de parámetro en esa ruta.
-
-#### Definición global
-
-```
-Route::pattern('id',        '\d+');
-Route::pattern('name',      '(:any)');
-```
-
-#### Definición local
-
-```
-Route::any('user/{id}',     'user/load')->where('id', '\d+');
-```
-
-También se pueden utilizar arrays en la definición local.
-
-```
-Route::any('user/{id}/{name}',     'user/load')->where(['id' => '\d+', 'name' => '(:any)']);
-```
-
-### Parámetros de rutas opcionales
-
-También se pueden definir parámetros opcionales. Esto permitirá a Yii2 usar la ruta habiendo o no una URI definido en esa posición. La definición de parámetros opcionales es igual que la de parámetros normales pero añadiendo un cierre de interrogación `?` a su definición.
-
-
-```
-Route::any('user/{id?}',    'user/load')->where('id', '\d+');
-```
-
-Esto hará que Yii2 acepte la rutas "user" y "user/12" habiendose necesitado tan sólo una línea para ello.
-
-Se pueden apilar diferentes parámetros opcionales en la misma ruta, siendo posible siempre acceder a todas rutas que las permutaciones posibles generen.
-
-```
-Route::any('user/{id?}/{name?}/{telephone?}',   'user/load');
-```
-
-### Accediendo a valores de parámetros
-
-Se ha añadido una función de azúcar sintáctico a la clase de Route que retorna el valor de ésta.
-
-```
-Route::input('id');
-```
-
-
-### Rutas con nombre
-
-Adicionalmente se pueden definir una serie de propiedades adicionales a los métodos usados en el enrutamiento básico.
-
-Uno de ellos es el nominar rutas de forma que se pueda trabajar en el futuro con sus direcciones web usando tan sólo el nombre que se les ha otorgado.
-
+Additionally there can be defined a group of additional properties in the basic routing methods.
+ 
+ One of them it's the route naming, that will let the developer use their defined web url using only it's name instead of use all their chain.
+ 
 ```
 Route::set_name('user_update', 'admin/user/load/');
 
 Route::get('user', 'user/index', ['as' => 'user']);
 ```
 
-Para obtener la url de una ruta por su nombre tan sólo habrá que hacer:
+To get a route url by it's name there is only necessary to
 
 ```
 echo Route::named('user');
@@ -166,31 +103,86 @@ echo Route::named('user');
 redirect(Route::named('user'));
 ```
 
-En el caso de que se trate de una ruta que contenga parámetros nominados, se podrá definir valores para éstos en un segundo parámetro en el método `named`.
+In case the route has named parameters, it's possible to define values for them in a second parameter of the method `named`
 
 ```
 Route::named('user', ['id' => 12]);
 ```
 
-Si la ruta tiene parámetros opcionales nominados a los que no se le ha definido un valor, éstos no aparecerán en la url de retorno del método.
+If the route has optional named parameters without a defined value, they won't be shown in the method's return url string.
 
+### Named parameters
 
-### Filtros de rutas
+It's possible to define named parameters instead of the regular expressions used by Yii2 in the parameter routing system. This will let the developer to use them in getting it's values during the application lifetime.
 
-Se pueden también definir filtros de tipo Yii2 o manuales en el sistema de rutas. Esto coexiste a la vez con la posibilidad de definirlos en el método `behaviors` de cada Controller. Se trata de una posibilidad adicional que permite el tener los filtros declarados en un mismo sitio y hacerlo en múltiples controllers a la vez, ya que, en lugar de funcionar como en Yii2, que los asigna a los Contollers y sus Actions, los filtros definidos a una ruta funcionan tan sólo con ella, separando así la relación Filtro - Controller.
+There are two additional defined wildcards, `(:any)` that matches with the regular expression "any character" and `(:num)` that matches with the regex "any number".
+
+```
+Route::any('user/{id}',     'user/load');
+```
+
+There are two ways of defining named parameters. The global definition, that will assign that regular expression or wildcard to all parameters with that name in all the routes defined in the application, and the local definition, that will only affect the route in which it's defined and will REWRITE any global route with the same name in this route.
+
+#### Global definition
+
+```
+Route::pattern('id',        '\d+');
+Route::pattern('name',      '(:any)');
+```
+
+#### Local definition
+
+```
+Route::any('user/{id}',     'user/load')->where('id', '\d+');
+```
+
+It's also possible to use arrays in the local definition to assign more than one parameter at the same time.
+
+```
+Route::any('user/{id}/{name}',     'user/load')->where(['id' => '\d+', 'name' => '(:any)']);
+```
+
+### Optional named routes
+
+There also can be defined optional parameters. This will let Yii2 use the route having or not an URI defined in that position. The definition of optional parameters it's the same as the normal named parameters but adding a question mark `?` in it's definition.
  
+```
+Route::any('user/{id?}',    'user/load')->where('id', '\d+');
+```
 
-Existe la posibilidad de utilizar 2 tipos de filtros en el módulo, los normales que utiliza Yii2 en sus aplicaciones, y uno específico que permite la introducción de funciones anónimas dentro de las cuales se ejecutará código definido por el usuario.
+This will make Yii2 to accept the routes "user" and "user/12" having being necessary only one line for that.
 
-#### Filtros tipo Yii2
+It's possible to stack different optional parameters in the same route, being also possible to access all the routes which the different permutations will make.
 
-Para asignar un filtro de este tipo a una ruta hay que añadirle una entrada adicional al parámetro de opciones llamada `filter`. Esto hará que cuando la ruta se ejecute, busque el filtro y lo lance.
+```
+Route::any('user/{id?}/{name?}',   'user/load');
+```
+
+This will make possible to access to "user/12/john", "user/john", "user/12", "user".
+
+### Getting named parameter values
+
+The route class has also a syntactic sugar method that let access to the parameter values defined in the route.
+
+```
+Route::input('id');
+```
+
+### Route filters
+
+There is also possible to define Yii2 type or manual filters in the Route class. This coexists at the same time with the normal filtering system of Yii2 that defines the filters in the `behaviors` method of each Controller. It's only an additional option that lets the developer to define filters by route level instead of Controllar and Action level. 
+
+There are two types of filters that the developer can use in the routing system. The Yii2 normal filters and a special kind of route that uses closures defined in the user as filters.
+
+#### Yii2 filters
+
+To assign a filter of this type in a route there is only necessary to add an additional entry in the options parameter called `filter`. This will make that, when the route is called, the system will search for this filter and execute it.
 
 ```
 Route::any('user/{id}', 'user/load', ['filter' => 'logged_in']);
 ```
 
-Para definir el filtro, hay que crear un array con los datos básicos de un filtro de Yii2 y asignarle un nombre.
+To define the filter, it's necessary to make an array with the basic data of a normal Yii2 filter and give it a name.
 
 ```
 Route::filter('logged_in', [
@@ -206,18 +198,17 @@ Route::filter('logged_in', [
   ]);
 ```
 
-#### Filtros manuales
+#### Manual filters
 
-Adicionalmente se pueden definir filtros especiales creados manualmente por el desarrollador en la forma de funcion anónima o closure que permite ejecutar código de Yii2 dentro de ellas.
- 
-Para asignar un filtro de este tipo en una ruta hay que añadir una entrada adicional al parámetro de opciones que puede ser `before` en caso de que se quiera que el filtro se ejecute antes del Action del Controler o `after` en caso de que eramos que se ejecute posteriormente.
+Additionally  its possible to define special filters make manually by the developer in the form of anonymous functions or closures that let run Yii2 code inside of them.
 
+To assign a filter of this kind in a route it's necessary to add a new additional entry in the options parameter that can be `before` in the case we want the filter to be launched before the Controller's Action is executed or `after` in case we want to launch it after that.
 
 ```
 Route::any('user/{id}', 'user/load', ['before' => 'check_this']);
 ```
 
-Para definir el filtro, hay que crear una closure y asignársela a la clase Route.
+To define the filter, it's required to make a closure and assign it to the Route class.
 
 ```
 Route::filter('check_this', function(){
@@ -232,33 +223,32 @@ Route::filter('check_this', function(){
 		});
 ```
 
-#### Múltiples filtros
+#### Multiple filters
 
 ```
 Route::any('user/{id}', 'user/load', ['before' => ['logged_in', 'check_params']]);
 Route::any('user/{id}', 'user/load', ['filter' => 'logged_in|check_params']);
 ```
 
-#### Filtros basados en patrones
+#### Pattern based filters
 
-También se puede especificar que un filtro se aplique a un grupo entero de rutas basadas en su URI.
+You may also specify that a filter applies to an entire set of routes based on their URI.
 
 ```
 Route::when('admin\/(.*)', ['filter' =>'logged_in']);
 ```
 
-En el ejemplo superior, el filtro se aplicaría a todas las rutas que comiencen por `admin/`.
+In the example above, the `admin` filter would be applied to all routes beginning with `admin/`.
 
-También se pueden aplicar verbos HTTP a este tipo de patrones.
+You may also constrain pattern filters by HTTP verbs:
 
 ```
 Route::when('admin\/(.*)', ['filter' =>'logged_in'], [get]);
 ```
 
+### Route groups
 
-### Grupos de rutas
-
-Permite al desarrollador añadir una serie de opciones a un grupo de rutas de forma masiva. Su principal utilidad puede ser la de añadir prefijos a éstas.
+This lets the developer adding a series of options in a group of routes masively. It's main utility it's to add url prefixes to a group of routes.
 
 ```
 Route::group(['prefix' => 'admin', 'filter' => 'logged_in'], function(){
@@ -266,14 +256,13 @@ Route::group(['prefix' => 'admin', 'filter' => 'logged_in'], function(){
 });
 ```
 
+### Subdomain routing
 
-### Enrutamiento de subdominios
+Sometimes an application can give support to some subdomains. For that it's possible to define specific routes for that subdomains.
 
-A veces una aplicación puede dar soporte a varios subdominios. Para ello es posible definir rutas específicas para los subdominios 
+It's only necessary to define the parameter that will hold the subdomain and the Route class will make the heavy lifting.
 
 ```
-Route::any('user/{id}', 'user/load', ['domain' => '{id}.my_domain.com']);
+Route::any('user/{id}', 'user/load', ['domain' => '{id}']);
 ```
 
-
-Routing and filtering extension system for yii2 framework that emulates the laravel routing system
