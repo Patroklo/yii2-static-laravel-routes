@@ -8,7 +8,7 @@ This module changes the route system definition of Yii2 in order to, instead of 
 
 Developed by Joseba Juániz ([@Patroklo](http://twitter.com/Patroklo))
 
-[Spanish Readme version](https://github.com/Patroklo/yii2-static-laravel-routes/blob/master/README.md)
+[Spanish Readme version](../yii2-static-laravel-routes/blob/master/README_spanish.md)
 
 ## Minimum requirements
 
