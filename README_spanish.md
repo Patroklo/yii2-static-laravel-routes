@@ -14,8 +14,8 @@ Desarrollado por Joseba Juániz ([@Patroklo](http://twitter.com/Patroklo))
 
 ## Requisitos
 
-*Yii2
-*Php 5.4 o superior
+* Yii2
+* Php 5.4 o superior
 
 ## Planes de futuro
 
@@ -23,7 +23,6 @@ Desarrollado por Joseba Juániz ([@Patroklo](http://twitter.com/Patroklo))
 * Crear sistema automático de hacer rutas RESTFul.
 // TODO
 * Probar los grupos de rutas como último parámetro en una ruta básica
-* Comprobar que en when el http verb funciona
 * Explicar la instalación ( hacer un fichero para composer, lo que tienen que poner en el config de la aplicación y que pueden tener varios ficheros en una carpeta)
 
 

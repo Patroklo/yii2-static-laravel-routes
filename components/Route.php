@@ -333,7 +333,7 @@ class Route
 		 * @param array $http_verb
 		 * @throws \Exception
 		 */
-		public static function when($regex_pattern, $filter, $http_verb = ['any'])
+		public static function when($regex_pattern, $filter, $http_verb = ['ANY'])
 		{
 			
 			if ( ! is_array($http_verb))
@@ -361,9 +361,13 @@ class Route
 			// add regex start and ending if not setted
 			if( ! ($regex_pattern[0] == '/' && $regex_pattern[strlen($regex_pattern) - 1] == '/')) 
 			{
-				$regex_pattern = '/'.$regex_pattern.'/';
+				$regex_pattern = '/'.$regex_pattern.'$/';
 			}
 			
+			foreach ($http_verb as $key => $verb)
+			{
+				$http_verb[$key] = strtoupper($verb);
+			}
 			
 			self::$when_filters[] = [
 										'regex_pattern' => $regex_pattern,
@@ -381,9 +385,25 @@ class Route
 		{
 			$filters = [];
 			
+			$request = Yii::$app->getRequest();
+			$request_method = $request->getMethod();
+			
 			foreach (self::$when_filters as $when)
 			{
-				if (preg_match($when['regex_pattern'], $from))
+				if (in_array('ANY', $when['http_verb']))
+				{
+					$valid_request_method = TRUE;
+				}
+				elseif (in_array($request_method, $when['http_verb']))
+				{
+					$valid_request_method = TRUE;
+				}
+				else
+				{
+					$valid_request_method = FALSE;
+				}
+
+				if ($valid_request_method == TRUE and preg_match($when['regex_pattern'], $from))
 				{
 					foreach ($when['filter'] as $type => $filter)
 					{
@@ -692,6 +712,8 @@ class Route
 				{
 					$this->options['domain'].= '/';
 				}
+
+	
 
 				$this->from = $this->options['domain'].$this->from;
 				$this->checked_from = $this->from;
