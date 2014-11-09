@@ -21,10 +21,6 @@ Desarrollado por Joseba Juániz ([@Patroklo](http://twitter.com/Patroklo))
 
 * Pasar parámetros manuales a los filtros.
 * Crear sistema automático de hacer rutas RESTFul.
-// TODO
-* Probar los grupos de rutas como último parámetro en una ruta básica
-* Explicar la instalación ( hacer un fichero para composer, lo que tienen que poner en el config de la aplicación y que pueden tener varios ficheros en una carpeta)
-
 
 
 ## Licencia
