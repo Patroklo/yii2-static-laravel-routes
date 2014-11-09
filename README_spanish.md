@@ -60,9 +60,41 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## Instalación
 
-Comming soon...
+* Instalar [Yii 2](http://www.yiiframework.com/download)
+* Instalar el paquete via [composer](http://getcomposer.org/download/) `"cyneek/yii2-routes": "dev-master"`
+* Modificar el fichero de configuración _'config/web.php'_
+
+```
+ 'components' => [
+					'route' => [
+						'class' => 'cyneek\yii2\routes\components\route',
+					],
+	]
+	...
+    'modules' => [
+		'routes' => [
+            'class' => 'cyneek\yii2\routes\Module',
+			'routes_dir' => array('../routes')
+		]
+		// set custom modules here
+    ],
+```
+* Hacer una carpeta _routes_ en el nivel de @app.
+* Insertar fichero en la carpeta _route_ usando la definición de la clase Route.
+* Profit!
+
 
 ## Definición
+
+Nota:
+
+Este sistema de enrutamiento usa los siguiente parámetros de la clase urlManager de Yii2 por defecto:
+
+* enablePretttyUrl = TRUE
+
+* enableStrictParsing = TRUE
+
+* showScriptName = FALSE
 
 ### Enrutamiento básico
 

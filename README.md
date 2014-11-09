@@ -52,9 +52,42 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## Instalation
 
-Comming soon...
+* Install [Yii 2](http://www.yiiframework.com/download)
+* Install package via [composer](http://getcomposer.org/download/) `"cyneek/yii2-routes": "dev-master"`
+* Update config file _'config/web.php'_
+
+```
+ 'components' => [
+					'route' => [
+						'class' => 'cyneek\yii2\routes\components\route',
+					],
+	]
+	...
+    'modules' => [
+		'routes' => [
+            'class' => 'cyneek\yii2\routes\Module',
+			'routes_dir' => array('../routes')
+		]
+		// set custom modules here
+    ],
+```
+* Make a _routes_ directory in your @app level.
+* Insert files in this directory using the Route class definition.
+* Profit!
+
 
 ## Definition
+
+Note:
+
+This routing system uses the Yii2 urlManager parameters by default:
+
+* enablePretttyUrl = TRUE
+
+* enableStrictParsing = TRUE
+
+* showScriptName = FALSE
+
 
 ### Basic routing
 
