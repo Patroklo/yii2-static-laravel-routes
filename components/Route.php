@@ -39,7 +39,7 @@ class Route
 		 * @var array
 		 */
 		private static $when_filters	= [];
-		
+
 		/**
 		 * @var string
 		 */
@@ -202,7 +202,7 @@ class Route
 			{
 				$http_verb = implode(',', $http_verb);
 			}
-			
+
 			$http_verb = strtoupper($http_verb);
 
 			return self::createRoute($http_verb, $from, $to, $options, $nested);
@@ -217,7 +217,7 @@ class Route
 		{
 			return Yii::$app->request->get($uri_name);
 		}
-		
+
 		/**
 		 * Adds a named route into the system
 		 *
@@ -266,7 +266,7 @@ class Route
 			{
 				if ($regex == '(:any)')
 				{
-					$regex = '(.*)';
+					$regex = '(.+)';
 				}
 				elseif ($regex == '(:num)')
 				{
@@ -335,21 +335,21 @@ class Route
 		 */
 		public static function when($regex_pattern, $filter, $http_verb = ['ANY'])
 		{
-			
+
 			if ( ! is_array($http_verb))
 			{
 				throw new \Exception('[Route::when] The http verb of filter patterns must be an array.');
 			}
-			
+
 			if ( ! is_array($filter))
 			{
 				$filter = ['filter' => $filter];
 			}
-			
+
 			// $filter can only have 3 keys, 'before', 'after' and 'filter'
-			
+
 			$filter_allowed_keys = ['before', 'after', 'filter'];
-			
+
 			foreach ($filter as $key => $data)
 			{
 				if ( ! in_array($key, $filter_allowed_keys))
@@ -357,18 +357,18 @@ class Route
 					throw new \Exception('[Route::when] Filter must have only before, after or filter keys.');
 				}
 			}
-			
+
 			// add regex start and ending if not setted
-			if( ! ($regex_pattern[0] == '/' && $regex_pattern[strlen($regex_pattern) - 1] == '/')) 
+			if( ! ($regex_pattern[0] == '/' && $regex_pattern[strlen($regex_pattern) - 1] == '/'))
 			{
 				$regex_pattern = '/'.$regex_pattern.'$/';
 			}
-			
+
 			foreach ($http_verb as $key => $verb)
 			{
 				$http_verb[$key] = strtoupper($verb);
 			}
-			
+
 			self::$when_filters[] = [
 										'regex_pattern' => $regex_pattern,
 										'filter'		=> $filter,
@@ -384,10 +384,10 @@ class Route
 		public static function getWhenFilters($from)
 		{
 			$filters = [];
-			
+
 			$request = Yii::$app->getRequest();
 			$request_method = $request->getMethod();
-			
+
 			foreach (self::$when_filters as $when)
 			{
 				if (in_array('ANY', $when['http_verb']))
@@ -411,7 +411,7 @@ class Route
 					}
 				}
 			}
-			
+
 			return $filters;
 		}
 
@@ -438,7 +438,7 @@ class Route
 			array_pop(self::$prefix);
 		}
 
-		
+
 		/**
 		 * Adds a list of options from the new prefix
 		 * @param array $options
@@ -455,7 +455,7 @@ class Route
 		{
 			array_pop(self::$group_options);
 		}
-		
+
 		/**
 		 * Returns the last active prefix or an empty string in case there is none
 		 * @param string $from
@@ -495,11 +495,11 @@ class Route
 			{
 				return end(self::$group_options);
 			}
-			
+
 			return [];
 		}
-		
-		
+
+
 		/**
 		 * Adds a new filter into the Routing system
 		 * It will be set as RoutesFilter object in case $data is a closure (Laravel standard filtering) or
@@ -550,7 +550,7 @@ class Route
 		static function createRoute($type, $from, $to, $options = array(), $nested = FALSE)
 		{
 			$group_options = self::getGroupOptions();
-			
+
 			if ( ! empty($group_options))
 			{
 				$options = array_merge($options, $group_options );
@@ -559,7 +559,7 @@ class Route
 			$route_object =  new _Route_object($type, self::getPrefix($from), $to, $options, $nested);
 
 			self::$routes[] = $route_object;
-			
+
 			$route_object->launchOptionalRoutes();
 
 			// if route has a nested parameter, we will call group for this route
@@ -568,7 +568,7 @@ class Route
 				$options['prefix'] = $from;
 				self::group($options, $nested);
 			}
-			
+
 			return new _Route_object_facade($route_object);
 		}
 
@@ -582,7 +582,7 @@ class Route
 	class _Route_object_facade
 	{
 		/**
-		 * @var _Route_object 
+		 * @var _Route_object
 		 */
 		private $route_object;
 
@@ -660,7 +660,7 @@ class Route
 		 * @var array
 		 */
 		private $optional_parameters = [];
-		
+
 		/**
 		 * @var _Route_object_facade[]
 		 */
@@ -693,27 +693,27 @@ class Route
 
 			if (array_key_exists('domain', $this->options))
 			{
-			
+
 				$web_domain = preg_replace('/http(s?):\/\//', '', Yii::$app->urlManager->getHostInfo());
-				
+
 				$web_domain = explode('.', $web_domain);
-				
+
 				// check if there is a chance of having a subdomain
 				if (count($web_domain) > 2)
 				{
 					unset($web_domain[0]);
 				}
-				
+
 				$web_domain = implode('.', $web_domain);
-				
+
 				$this->options['domain'] = 'http://'.$this->options['domain'].'.'.$web_domain;
-				
+
 				if (substr($this->options['domain'], -1) != '/')
 				{
 					$this->options['domain'].= '/';
 				}
 
-	
+
 
 				$this->from = $this->options['domain'].$this->from;
 				$this->checked_from = $this->from;
@@ -775,13 +775,13 @@ class Route
 		/**
 		 * Makes the optional additional routes. It's important to keep the
 		 * data the same as the parent route
-		 * 
+		 *
 		 * This method MUST be called BEFORE calling checkFrom()
-		 * 
+		 *
 		 */
 		function launchOptionalRoutes()
 		{
-			
+
 			foreach ($this->optional_parameters as $parameters)
 			{
 				$sub_from = $this->checked_from;
@@ -790,7 +790,7 @@ class Route
 				{
 					$sub_from = str_replace('/{'.$c.'}', '', $sub_from);
 				}
-				
+
 				// we get rid of the optional question mark because we will launch all optional
 				// parameters from the parent route
 
@@ -805,7 +805,7 @@ class Route
 						unset($new_options[$not_option]);
 					}
 				}
-				
+
 				$this->optional_routesList[] = Route::createRoute($this->type, $sub_from, $this->to, $new_options, $this->nested);
 			}
 
@@ -830,7 +830,7 @@ class Route
 
 				if (is_null($patternRegex))
 				{
-					$patternRegex = '(.*)';
+					$patternRegex = '(.+)';
 				}
 				$this->checked_from = str_replace('{'.$c.'}', '<'.$c.':'.$patternRegex.'>', $this->checked_from);
 			}
@@ -844,7 +844,7 @@ class Route
 		public function addLocalPattern($pattern, $pattern_expression)
 		{
 			$this->local_patterns[$pattern] = $pattern_expression;
-			
+
 			foreach ($this->optional_routesList as $route)
 			{
 				$route->where($pattern, $pattern_expression);
@@ -864,9 +864,9 @@ class Route
 
 				$this->check_from_made = TRUE;
 			}
-			
+
 			$returnString = $this->checked_from;
-			
+
 			if ($this->type != '')
 			{
 				$returnString = $this->type.' '.$returnString;
@@ -892,7 +892,7 @@ class Route
 		private function makeFilters()
 		{
 			$from = $this->from();
-			
+
 			// checks the "when" filters
 			$pattern_filters = Route::getWhenFilters($from);
 
@@ -910,12 +910,12 @@ class Route
 				$filters['before'] = $filter_checked;
 			}
 			else $filters['before'] = [];
-			
+
 			if (array_key_exists('before', $pattern_filters))
 			{
 				$filters['before'] = array_merge($filters['before'], $pattern_filters['before']);
 			}
-			
+
 
 			if ($this->get_option('after') != FALSE)
 			{
@@ -930,7 +930,7 @@ class Route
 				$filters['after'] = $filter_checked;
 			}
 			else $filters['after'] = [];
-			
+
 			if (array_key_exists('after', $pattern_filters))
 			{
 				$filters['after'] = array_merge($filters['after'], $pattern_filters['after']);
@@ -954,12 +954,12 @@ class Route
 			{
 				$filters['filter'] = array_merge($filters['filter'], $pattern_filters['filter']);
 			}
-			
+
 			return $filters;
 
 		}
-		
-		
+
+
 		/**
 		 * Returns the transformed data of the Route object that will be
 		 * processed in the Module
