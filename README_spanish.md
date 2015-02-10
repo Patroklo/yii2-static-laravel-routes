@@ -79,6 +79,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Insertar fichero en la carpeta _route_ usando la definición de la clase Route.
 * Profit!
 
+## Desactivando el módulo
+
+Es posible desactivar el módulo de enrutamiento símplemente añadiendo a la definición del array "routes" en el fichero config el valor "active" = FALSE.
+
+```
+'modules' => [
+		'routes' => [
+            'class' => 'cyneek\yii2\routes\Module',
+			'active' => FALSE
+		]
+		// set custom modules here
+    ],
+```
 
 ## Definición
 

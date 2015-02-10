@@ -75,6 +75,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Insert files in this directory using the Route class definition.
 * Profit!
 
+## Deactivating module
+
+It's possible to deactivate the routing module just adding to the definition of "routes" array in the config the value "active" = FALSE.
+
+```
+'modules' => [
+		'routes' => [
+            'class' => 'cyneek\yii2\routes\Module',
+			'active' => FALSE
+		]
+		// set custom modules here
+    ],
+```
 
 ## Definition
 
@@ -298,4 +311,3 @@ It's only necessary to define the parameter that will hold the subdomain and the
 ```
 Route::any('user/{id}', 'user/load', ['domain' => '{id}']);
 ```
-
