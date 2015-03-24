@@ -5,6 +5,7 @@ namespace cyneek\yii2\routes;
 use cyneek\yii2\routes\components\Route;
 use DirectoryIterator;
 use Yii;
+use yii\caching\TagDependency;
 
 
 class Module extends \yii\base\Module
@@ -42,6 +43,19 @@ class Module extends \yii\base\Module
 	public $active = TRUE;
 
 
+	/**
+	 * Defines if the routing system will use a database table to hold some of its routes
+	 *
+	 * @var bool
+	 */
+	public $activate_database_routes = FALSE;
+
+	/**
+	 * Defines the database tableName
+	 */
+	public static $tableName = 'site_routes';
+
+
 	public function init()
 	{
 
@@ -53,6 +67,9 @@ class Module extends \yii\base\Module
 
 			// load urls into urlManager
 			$this->loadUrlRoutes($this->routes_dir);
+
+			$this->loadDBRoutes();
+
 			// get the route data (filters, routes, etc...)
 			$routeData = Route::map();
 
@@ -73,6 +90,49 @@ class Module extends \yii\base\Module
 
 			// relaunch init with the new data
 			Yii::$app->urlManager->init();
+		}
+	}
+
+	/**
+	 * Load routes from Database if the $activate_database_routes parameter is true
+	 *
+	 * @throws \Exception
+	 */
+	function loadDBRoutes()
+	{
+		if ($this->activate_database_routes === TRUE) {
+
+			$dependency = new TagDependency(array('tags' => [self::className()]));
+
+			$route_list = Yii::$app->db->cache(function () {
+
+				return (new \yii\db\Query())
+					->from($this->tableName)
+					->where(['app' => Yii::$app->id])
+					->all();
+			}, 0, $dependency);
+
+			foreach ($route_list as $route) {
+				$options = json_decode($route['config'], TRUE);
+
+				if (is_null($options)) {
+					$options = [];
+				}
+
+				Route::$route['type']($route['uri'], $route['route'], $options);
+			}
+
+		}
+	}
+
+	/**
+	 * Resets the cache of the route retrieval query only in case it's activated.
+	 *
+	 */
+	function resetDBCache()
+	{
+		if (!is_null(Yii::$app->cache)) {
+			TagDependency::invalidate(Yii::$app->cache, [self::className()]);
 		}
 	}
 
