@@ -29,7 +29,7 @@ class m150323_114239_routes extends Migration
 
 		// add indexes for performance optimization
 		$this->createIndex('{{%site_routes_type_app}}', $this->tableName(), ['type', 'app'], true);
-		$this->createIndex('{{%site_routes_app}}', $this->tableName(), ['app'], true);
+		$this->createIndex('{{%site_routes_app}}', $this->tableName(), ['app'], false);
 
 	}
 
