@@ -319,3 +319,34 @@ Tan sólo será necesario definir el parámetro que tendrá el subdominio y la c
 ```
 Route::any('user/{id}', 'user/load', ['domain' => '{id}']);
 ```
+
+
+## Enrutamiento por base de datos
+
+Adicionalmente, ahora es posible añadir rutas en una tabla de base de datos, que serán cargadas antes de la fase de enrutamiento, justo después de cargar las rutas por fichero. Si hay un sistema de cacho definido, la query será cacheada indefinidamente con un "Tag dependency" que podrá ser reseteado llamando al método "resetDBCache" del módulo.
+
+Por defecto el enrutamiento de base de datos estará desactivado. Para poder usarlo debe definirse el parámetro "activate_database_routes" como true en el módulo de configuración.
+
+Los valores en la tabla deben ser almacenados así:
+
+* type (string) (obligatorio)
+> El tipo de enrutamiento (any, post, get...)
+    
+* uri (string) (obligatorio)
+> El uri que el sistema escuchará para realizar el enrutamiento.
+
+* route (string) (obligatorio)
+> El controlador y método que serán cargados por el sistema.
+
+* config (array) (opcional)
+> Las configuraciones especiales definidas para la ruta actual.
+		
+* app (string) (obligatorio) 
+> La app activa en ese momento en el sistema (app-frontend, app-backend, app-basic).
+
+
+```
+type	uri	        route	    config	app
+post	user/{id}	user/load	NULL	app-frontend
+```
+

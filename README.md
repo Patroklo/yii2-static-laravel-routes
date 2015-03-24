@@ -311,3 +311,33 @@ It's only necessary to define the parameter that will hold the subdomain and the
 ```
 Route::any('user/{id}', 'user/load', ['domain' => '{id}']);
 ```
+
+## Database Routing
+
+As an addition, now it's possible to add routes into a database table which will be loaded before the routing phase. If there is a cache system defined, the query will be cached indefinitelly with a tag dependency that can be reseted calling the "resetDBCache" Module method.
+
+By default the database routing will be deactivated. To use it there should be defined the "activate_database_routes" module parameter as true.
+
+The values in the table should be stored like:
+
+* type (string) (obligatory)
+> The route type (any, post, get...)
+    
+* uri (string) (obligatory)
+> The uri that will be listened to make the route.
+
+* route (string) (obligatory)
+> The controller and method that will be loaded in the system.
+
+* config (array) (optional)
+> The special configurations defined for this routes.
+		
+* app (string) (obligatory) 
+> The active app in this moment in the system (app-frontend, app-backend, app-basic).
+
+
+```
+type	uri	        route	    config	app
+post	user/{id}	user/load	NULL	app-frontend
+```
+
