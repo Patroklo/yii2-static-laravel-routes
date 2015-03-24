@@ -107,7 +107,7 @@ class Module extends \yii\base\Module
 			$route_list = Yii::$app->db->cache(function () {
 
 				return (new \yii\db\Query())
-					->from($this->tableName)
+					->from(self::$tableName)
 					->where(['app' => Yii::$app->id])
 					->all();
 			}, 0, $dependency);
