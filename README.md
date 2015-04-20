@@ -57,19 +57,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Update config file _'config/web.php'_
 
 ```
- 'components' => [
-					'route' => [
-						'class' => 'cyneek\yii2\routes\components\route',
-					],
+'bootstrap' => ['log', 'routes'];
+...
+'components' => [
+	'route' => [
+		'class' => 'cyneek\yii2\routes\components\route',
+	],
+]
+...
+'modules' => [
+	'routes' => [
+		'class' => 'cyneek\yii2\routes\Module',
+		'routes_dir' => array('../routes')
 	]
-	...
-    'modules' => [
-		'routes' => [
-            'class' => 'cyneek\yii2\routes\Module',
-			'routes_dir' => array('../routes')
-		]
-		// set custom modules here
-    ],
+	// set custom modules here
+],
 ```
 * Make a _routes_ directory in your @app level.
 * Insert files in this directory using the Route class definition.
