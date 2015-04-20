@@ -61,19 +61,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Modificar el fichero de configuración _'config/web.php'_
 
 ```
- 'components' => [
-					'route' => [
-						'class' => 'cyneek\yii2\routes\components\route',
-					],
+'bootstrap' => ['log', 'routes'];
+...
+'components' => [
+	'route' => [
+		'class' => 'cyneek\yii2\routes\components\route',
+	],
+]
+...
+'modules' => [
+	'routes' => [
+		'class' => 'cyneek\yii2\routes\Module',
+		'routes_dir' => array('../routes')
 	]
-	...
-    'modules' => [
-		'routes' => [
-            'class' => 'cyneek\yii2\routes\Module',
-			'routes_dir' => array('../routes')
-		]
-		// set custom modules here
-    ],
+	// set custom modules here
+],
 ```
 * Hacer una carpeta _routes_ en el nivel de @app.
 * Insertar fichero en la carpeta _route_ usando la definición de la clase Route.
