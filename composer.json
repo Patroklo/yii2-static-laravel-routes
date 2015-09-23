@@ -1,20 +1,30 @@
 {
-"name": "cyneek/yii2-routes",
-"description": "Routing and filtering extension system for Yii2 framework that emulates the Laravel routing system.",
-"keywords": ["yii", "yii2", "route", "filter"],
-"version":"0.0.1",
-"type": "yii2-extension",
-"license": "BSD",
-"authors": [
-{
-"name": "Patroklo",
-"email": "patroklo@gmail.com"
-}
-],
-"require": {
-"yiisoft/yii2": "*"
-},
-"autoload": {
-"psr-4": { "cyneek\\yii2\\routes\\": "" }
-}
+  "name": "cyneek/yii2-routes",
+  "description": "Routing and filtering extension system for Yii2 framework that emulates the Laravel routing system.",
+  "keywords": [
+    "yii",
+    "yii2",
+    "route",
+    "filter"
+  ],
+  "version": "0.0.1",
+  "type": "yii2-extension",
+  "license": "BSD",
+  "authors": [
+    {
+      "name": "Patroklo",
+      "email": "patroklo@gmail.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "cyneek\\yii2\\routes\\": ""
+    }
+  },
+  "extra": {
+    "bootstrap": "path\\to\\MyBootstrapClass"
+  }
 }
