@@ -7,7 +7,7 @@
     "route",
     "filter"
   ],
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "yii2-extension",
   "license": "BSD",
   "authors": [
