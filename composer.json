@@ -25,6 +25,6 @@
     }
   },
   "extra": {
-    "bootstrap": "path\\to\\MyBootstrapClass"
+    "bootstrap": "@vendor\\cyneek\\yii2\\routes\\Module"
   }
 }
