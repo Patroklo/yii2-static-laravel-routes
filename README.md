@@ -343,3 +343,8 @@ type	uri	        route	    config	app
 post	user/{id}	user/load	NULL	app-frontend
 ```
 
+## Known Problems
+
+Usually if you don't have a `baseUrl` defined you may have problems with the routing because it is prepending additional url strings that you may not use.
+
+In order to solve this problem, you should define a valid `baseUrl` in your config.

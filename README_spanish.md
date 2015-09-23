@@ -352,3 +352,8 @@ type	uri	        route	    config	app
 post	user/{id}	user/load	NULL	app-frontend
 ```
 
+## Problemas conocidos
+
+A veces si no tenemos un `baseUrl` definido podemos tener problemas con el enrutamiento porque está añadiendo strings adicionales al url que no queremos usar.
+
+Para solucionar este problema, deberíamos definir un `baseUrl` válido en el archivo config.
