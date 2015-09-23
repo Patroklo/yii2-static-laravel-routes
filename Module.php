@@ -6,11 +6,10 @@ use cyneek\yii2\routes\components\Route;
 use cyneek\yii2\routes\models\Route as RouteDb;
 use DirectoryIterator;
 use Yii;
-use yii\base\BootstrapInterface;
 use yii\caching\TagDependency;
 
 
-class Module extends \yii\base\Module implements BootstrapInterface
+class Module extends \yii\base\Module
 {
 
     /**
@@ -51,11 +50,12 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /**
      * @inheritdoc
-     * @param $app
+     *
      * @throws \Exception
      */
-    public function bootstrap($app)
+    public function init()
     {
+        parent::init();
 
         if ($this->active === TRUE)
         {

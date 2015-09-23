@@ -23,8 +23,5 @@
     "psr-4": {
       "cyneek\\yii2\\routes\\": ""
     }
-  },
-  "extra": {
-    "bootstrap": "@vendor\\cyneek\\yii2\\routes\\Module"
   }
 }
