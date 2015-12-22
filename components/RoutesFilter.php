@@ -73,11 +73,11 @@ class RoutesFilter extends ActionFilter
                 $id = substr($id, strlen($mid) + 1);
             }
 
-            $id = $action->controller->id . '/' . $id;
+            $id = $action->controller->getUniqueId() . '/' . $id;
         }
         else
         {
-            $id = $action->controller->id . '/' . $action->id;
+            $id = $action->controller->getUniqueId() . '/' . $action->id;
         }
 
         return !in_array($id, $this->except, TRUE) && (empty($this->only) || in_array($id, $this->only, TRUE));
